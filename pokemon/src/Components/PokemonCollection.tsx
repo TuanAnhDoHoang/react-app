@@ -24,11 +24,6 @@ export const PokemonCollection: React.FC<Props>  = (props) => {
              viewDetail.isOpen == true? 'collection-container-active' : 'collection-container'
          }
         >
-        {/* {viewDetail.isOpen?(
-            <div className="overlay"></div>
-        ):(
-            <div className=""></div>
-        )} */}
         {pokemons.map((poke) => {return (
             
             <div onClick={() => handleViewDetail(poke.id)} key={poke.id}>
