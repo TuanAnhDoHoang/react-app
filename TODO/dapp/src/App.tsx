@@ -39,7 +39,8 @@ function App() {
       <div style={{paddingBottom: 20}}>
         <ConnectButton style={{
           backgroundColor:"black", 
-          color:"white"}}/>
+          color:"white"
+          }}/>
         </div>
       
       <input 

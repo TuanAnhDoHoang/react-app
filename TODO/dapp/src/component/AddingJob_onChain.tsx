@@ -8,7 +8,7 @@ interface Props{
 }
 export const AddingJob_onChain: React.FC<Props> = (props) => {
     return (<>
-
+    
     </>);
 }
 
