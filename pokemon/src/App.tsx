@@ -16,6 +16,7 @@ function App() {
     id: 0,
     isOpen: false,
   });
+
   useEffect(() =>{
     setLoading(true);
     const getPokemon = async () => {
