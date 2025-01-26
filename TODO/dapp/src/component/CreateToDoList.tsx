@@ -1,13 +1,15 @@
 import { Transaction } from "@mysten/sui/transactions";
+import { PackageId, ModuleName } from "../OnChainInformation";
 
-interface Transfer{
-    to: String,
-    amount: number;
-}
+
 export const CreateToDoList = () => {
-    const transfers: Transfer[] = getTransfer(); 
-    const tx = new Transaction();
-    const coin = tx.splitCoins(tx.gas, )
+    // const []
+    const tx = new Transaction(); 
+    const functionName = 'create_new_todoList';
+    tx.moveCall({
+        target: `${PackageId}::${ModuleName}::${functionName}`,
+    }) 
+    
     return (<>
 
     </>);

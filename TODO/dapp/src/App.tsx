@@ -3,17 +3,21 @@ import { useState } from "react";
 import { AddingJob_onChain } from "./component/AddingJob_onChain";
 import { RemoveJob_onChain } from "./component/RemoveJob_onChain";
 import { ConnectButton, useAccounts } from "@mysten/dapp-kit";
+import { SaveOnChain } from "./component/SaveOnChain";
 
-
+//Adding vào list 1 lần nhiều jobs và lưu trong adding List
+//Remove jobs trong list 1 lần nhiều jobs và lưu trong Remove List
+//Save on chain sẽ cập nhận object todoList trên block chain dựa trên hai List
 function App() {
+
   const [list, setList] = useState<string[]>([])
   const [job, setJob] = useState<string>("");
+  const [AddingList, setAddingList] = useState<String[]>([]);
+  const [RemoveList, setRemoveList] = useState<number[]>([]); //Remove dependent on index of jobs in exist list
+
   const Add_to_todoList = () => {
     if(job != ''){
       setList([... list, job]);
-      <AddingJob_onChain
-        job={job}
-      />
       setJob('')
     }
   }  
@@ -24,24 +28,35 @@ function App() {
   }
   const RemoveJob = (index: number) => {
     setList(list.filter((_, i) => i !== index));
-    <RemoveJob_onChain
-      index={index}
-    />
   }
   const handleKeyDown = (key: string) => {
     if(key === "Enter"){
       Add_to_todoList(); 
     }
   }
+  const handleSaveOnChain = () => {
+    <SaveOnChain 
+      AddingList={AddingList}
+      RemoveList={RemoveList}
+    />
+    // Xoá "bộ nhớ" sau khi cập nhận lên blockchain
+    setAddingList([]);
+    setRemoveList([]);
+  }
   return (
     <div style={{padding:20}}>
+      <Flex>
+        <div style={{paddingBottom: 20}}>
+          <ConnectButton style={{
+            backgroundColor:"black", 
+            color:"white"
+            }}/>
+          </div>
 
-      <div style={{paddingBottom: 20}}>
-        <ConnectButton style={{
-          backgroundColor:"black", 
-          color:"white"
-          }}/>
-        </div>
+          <div style={{padding: 20}} onClick={handleSaveOnChain}>
+            <Button>Save on chain</Button>
+          </div>
+      </Flex>
       
       <input 
         className="input-job" 

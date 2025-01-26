@@ -6,11 +6,13 @@
 // https://docs.sui.io/concepts/sui-move-concepts/conventions
 module todo_blockchain::todo_blockchain;
 use std::string::String;
+
 public struct ToDoList has key, store{
     id: UID,
     jobName: vector<String>,
 }
-public fun create_new_todoList(jobName: vector<String>, ctx: &mut TxContext): ToDoList{
+public fun create_new_todoList(ctx: &mut TxContext): ToDoList{
+    let jobName:vector<String> = vector::empty();
     ToDoList{
         id: object::new(ctx),
         jobName,
