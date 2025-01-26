@@ -2,7 +2,7 @@ import {Button, Flex} from  "@radix-ui/themes";
 import { useState } from "react";
 import { AddingJob_onChain } from "./component/AddingJob_onChain";
 import { RemoveJob_onChain } from "./component/RemoveJob_onChain";
-import { ConnectButton, useAccounts } from "@mysten/dapp-kit";
+import { ConnectButton, useAccounts, useCurrentAccount } from "@mysten/dapp-kit";
 import { SaveOnChain } from "./component/SaveOnChain";
 
 //Adding vào list 1 lần nhiều jobs và lưu trong adding List
@@ -14,6 +14,7 @@ function App() {
   const [job, setJob] = useState<string>("");
   const [AddingList, setAddingList] = useState<String[]>([]);
   const [RemoveList, setRemoveList] = useState<number[]>([]); //Remove dependent on index of jobs in exist list
+  const currentAccount = useCurrentAccount();
 
   const Add_to_todoList = () => {
     if(job != ''){
