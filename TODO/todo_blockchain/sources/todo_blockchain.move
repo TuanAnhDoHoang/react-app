@@ -6,28 +6,41 @@
 // https://docs.sui.io/concepts/sui-move-concepts/conventions
 module todo_blockchain::todo_blockchain;
 use std::string::String;
+use sui::event;
 
 public struct ToDoList has key, store{
     id: UID,
     jobName: vector<String>,
 }
-public fun create_new_todoList(ctx: &mut TxContext): ToDoList{
-    let jobName:vector<String> = vector::empty();
-    ToDoList{
+public struct ToDoListCreated has copy, drop {
+    id: ID,
+    jobName: vector<String>,
+}
+#[error(code = 0)]
+const EIndexOutOfBoud: u64 = 0;
+const EEmptyList: u64 = 1;
+
+public fun create_new_todoList(ctx: &mut TxContext): ToDoList {
+    let jobName: vector<String> = vector::empty();
+    let todoList = ToDoList {
         id: object::new(ctx),
         jobName,
-    }
+    };
+    let todoListId = object::id(&todoList);
+    event::emit(ToDoListCreated {
+        id: todoListId,
+        jobName: vector::empty(),
+    });
+    todoList
 }
 public fun add_to_list(todoList: &mut ToDoList, job: vector<String>){
+    assert!(job == vector::empty(), EEmptyList);
     let mut i: u64 = 0;
     while(i < job.length()){
         vector::push_back(&mut todoList.jobName, job[i]);
         i = i + 1;
     }
 }
-#[error(code = 0)]
-const EIndexOutOfBoud: u64 = 0;
-const EEmptyList: u64 = 1;
 public fun remove_job_from_list(todoList: &mut ToDoList, sortedRemoveIndexes: vector<u64>){
     //Thiết kế event cho các lỗi 
     assert!(sortedRemoveIndexes != vector::empty(), EEmptyList);
@@ -50,38 +63,38 @@ public fun remove_job_from_list(todoList: &mut ToDoList, sortedRemoveIndexes: ve
     };
     todoList.jobName = tempVec;
 }
-// #[test_only]
-// use std::debug;
-// #[test]
-// fun test_function(): ToDoList{
-//    let mut ctx = tx_context::dummy();
-//    let mut todoList = create_new_todoList(&mut ctx);
-//    let jobList: vector<String> = vector::empty();
-//    vector::push_back(&mut todoList.jobName, b"cooking".to_string());
-//    vector::push_back(&mut todoList.jobName, b"home work".to_string());
-//    vector::push_back(&mut todoList.jobName, b"house chorce".to_string());
-//    vector::push_back(&mut todoList.jobName, b"code".to_string());
-//    vector::push_back(&mut todoList.jobName, b"date".to_string());
-//    add_to_list(&mut todoList, jobList);
-   
-//    let mut index = 0;
-//    while(index < todoList.jobName.length()){
-//        debug::print(&todoList.jobName[index]);
-//        index = index + 1;
-//    };
-//    index = 0;
+#[test_only]
+use std::debug;
+#[test]
+fun test_function(): ToDoList{
+   let mut ctx = tx_context::dummy();
+   let mut todoList = create_new_todoList(&mut ctx);
+   let jobList: vector<String> = vector::empty();
+   vector::push_back(&mut todoList.jobName, b"cooking".to_string());
+   vector::push_back(&mut todoList.jobName, b"home work".to_string());
+   vector::push_back(&mut todoList.jobName, b"house chorce".to_string());
+   vector::push_back(&mut todoList.jobName, b"code".to_string());
+   vector::push_back(&mut todoList.jobName, b"date".to_string());
+   add_to_list(&mut todoList, jobList);
 
-//    let mut removeList: vector<u64> = vector::empty();
+   let mut index = 0;
+   while(index < todoList.jobName.length()){
+       debug::print(&todoList.jobName[index]);
+       index = index + 1;
+   };
+   index = 0;
 
-//    removeList.push_back(1);
-//    removeList.push_back(10);
-//    remove_job_from_list(&mut todoList, removeList);
+   let mut removeList: vector<u64> = vector::empty();
 
-//    debug::print(&b"Removing from list".to_string());
-//    while(index < todoList.jobName.length()){
-//        debug::print(&todoList.jobName[index]);
-//        index = index + 1;
-//    };
-//    debug::print_stack_trace();
-//    todoList
-// }
+   removeList.push_back(1);
+   removeList.push_back(2);
+   remove_job_from_list(&mut todoList, removeList);
+
+   debug::print(&b"Removing from list".to_string());
+   while(index < todoList.jobName.length()){
+       debug::print(&todoList.jobName[index]);
+       index = index + 1;
+   };
+   debug::print_stack_trace();
+   todoList
+}

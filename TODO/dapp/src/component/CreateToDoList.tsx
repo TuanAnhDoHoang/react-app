@@ -9,6 +9,7 @@ interface Props{
     client: SuiClient,
     currentAccount: WalletAccount | null,
     todoListObjectId: string[],
+    active: boolean,
 }
 
 export const CreateToDoList: React.FC<Props> = (props) => {
@@ -27,30 +28,31 @@ export const CreateToDoList: React.FC<Props> = (props) => {
             });
         }
     });
-
-    const createToDoList = async () => {
-        const tx = new Transaction();
-        const functionName = 'create_new_todoList';
-        tx.moveCall({
-            target: `${PackageId}::${ModuleName}::${functionName}`,
-        });
-        const result = await signAndExecuteTransaction(
-            {
-                transaction: tx,
-            },
-            {
-                onSuccess: (result) => {
-                    console.log(result);
-                    setDigest(prev => prev = result.digest);
-                    alert(`create new list successfully ${result.digest}`);
+    useEffect(() => {
+        const createToDoList = async () => {
+            const tx = new Transaction();
+            const functionName = 'create_new_todoList';
+            tx.moveCall({
+                target: `${PackageId}::${ModuleName}::${functionName}`,
+            });
+            const result = await signAndExecuteTransaction(
+                {
+                    transaction: tx,
+                },
+                {
+                    onSuccess: (result) => {
+                        console.log(result);
+                        setDigest(prev => prev = result.digest);
+                        alert(`create new list successfully ${result.digest}`);
+                    }
                 }
-            }
-        );
-        console.log(result);
-    };
-
-    createToDoList();
+            );
+            console.log(result);
+        };
+        createToDoList();
+    }, []) 
     return (
+
         <></>
     );
 }
