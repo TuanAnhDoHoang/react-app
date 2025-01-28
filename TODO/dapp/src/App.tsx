@@ -2,9 +2,9 @@ import {Button, Flex} from  "@radix-ui/themes";
 import { useState } from "react";
 import { AddingJob_onChain } from "./component/AddingJob_onChain";
 import { RemoveJob_onChain } from "./component/RemoveJob_onChain";
-import { ConnectButton, useAccounts, useCurrentAccount } from "@mysten/dapp-kit";
+import { ConnectButton, useAccounts, useCurrentAccount, useSuiClient } from "@mysten/dapp-kit";
 import { SaveOnChain } from "./component/SaveOnChain";
-
+import { CreateToDoList } from "./component/CreateToDoList";
 //Adding vào list 1 lần nhiều jobs và lưu trong adding List
 //Remove jobs trong list 1 lần nhiều jobs và lưu trong Remove List
 //Save on chain sẽ cập nhận object todoList trên block chain dựa trên hai List
@@ -14,6 +14,12 @@ function App() {
   const [job, setJob] = useState<string>("");
   const [AddingList, setAddingList] = useState<String[]>([]);
   const [RemoveList, setRemoveList] = useState<number[]>([]); //Remove dependent on index of jobs in exist list
+  const [todoListObjectId, setTodoListObjectID] = useState<string[]>(() => {
+    const storedId = localStorage.getItem("todoListObjectId");
+    return storedId ? [storedId] : [];
+  });
+
+  const client = useSuiClient();
   const currentAccount = useCurrentAccount();
 
   const Add_to_todoList = () => {
@@ -44,6 +50,15 @@ function App() {
     setAddingList([]);
     setRemoveList([]);
   }
+  const CreateNewTodoList = () => {
+    <CreateToDoList
+      client={client}
+      currentAccount={currentAccount}
+      todoListObjectId = {todoListObjectId}
+    />
+    if(todoListObjectId.length > 0 )localStorage.setItem("todoListObjectId", JSON.stringify(todoListObjectId));
+  } 
+  console.log(todoListObjectId);
   return (
     <div style={{padding:20}}>
       <Flex>
@@ -53,34 +68,43 @@ function App() {
             color:"white"
             }}/>
           </div>
-
-          <div style={{padding: 20}} onClick={handleSaveOnChain}>
-            <Button>Save on chain</Button>
-          </div>
+          {currentAccount && todoListObjectId.length > 0 &&
+            <div style={{padding: 20}} onClick={handleSaveOnChain}>
+              <Button>Save on chain</Button>
+            </div>
+           }  
+           {currentAccount && <div>
+            <Button onClick={CreateNewTodoList}>
+              Create new todoList
+            </Button>
+           </div>}
       </Flex>
-      
-      <input 
-        className="input-job" 
-        type="text" 
-        onChange={(e) => {setJob(e.target.value)}} 
-        value={job}
-        onKeyDown={(e) => handleKeyDown(e.key)}/>
 
-      <Button className="btn" color="red" onClick={Add_to_todoList}>Add</Button>
+      {todoListObjectId.length > 0 && currentAccount &&
+      <div className="Todo-list-implement">
+        <input 
+          className="input-job" 
+          type="text" 
+          onChange={(e) => {setJob(e.target.value)}} 
+          value={job}
+          onKeyDown={(e) => handleKeyDown(e.key)}/>
 
-      <ul className="todo-list" style={{listStyle:"none"}}>
+        <Button className="btn" color="red" onClick={Add_to_todoList}>Add</Button>
 
-        {list.map((jobName, index) => (
-          <Flex key={index}>
-            <button className="remove-btn" onClick={() => RemoveJob(index)}>X</button>
-            <li className="job-name" style={{paddingLeft:20}}>{jobName}</li>   
-         </Flex>
-        ))}
+        <ul className="todo-list" style={{listStyle:"none"}}>
 
-      </ul>
+          {list.map((jobName, index) => (
+            <Flex key={index}>
+              <button className="remove-btn" onClick={() => RemoveJob(index)}>X</button>
+              <li className="job-name" style={{paddingLeft:20}}>{jobName}</li>   
+           </Flex>
+          ))}
 
-      <Button onClick={ClearList}>Clear All</Button>
+        </ul>
 
+        <Button onClick={ClearList}>Clear All</Button>
+      </div>
+      }
     </div>
   );
 }
