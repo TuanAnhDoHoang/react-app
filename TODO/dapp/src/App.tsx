@@ -10,6 +10,7 @@ import { CreateToDoList } from "./component/CreateToDoList";
 //Save on chain sẽ cập nhận object todoList trên block chain dựa trên hai List
 function App() {
 
+  const [createButtonState, setCreateButtonState] = useState(false);
   const [list, setList] = useState<string[]>([])
   const [job, setJob] = useState<string>("");
   const [AddingList, setAddingList] = useState<String[]>([]);
@@ -42,23 +43,24 @@ function App() {
     }
   }
   const handleSaveOnChain = () => {
-    <SaveOnChain 
-      AddingList={AddingList}
-      RemoveList={RemoveList}
-    />
+    return (
+      <SaveOnChain 
+        AddingList={AddingList}
+        RemoveList={RemoveList}
+      />
+    );
     // Xoá "bộ nhớ" sau khi cập nhận lên blockchain
     setAddingList([]);
     setRemoveList([]);
   }
   const CreateNewTodoList = () => {
-    <CreateToDoList
-      client={client}
-      currentAccount={currentAccount}
-      todoListObjectId = {todoListObjectId}
-    />
-    if(todoListObjectId.length > 0 )localStorage.setItem("todoListObjectId", JSON.stringify(todoListObjectId));
-  } 
-  console.log(todoListObjectId);
+    return (
+      <CreateToDoList
+        client={client}
+        currentAccount={currentAccount}
+        todoListObjectId={todoListObjectId}
+      />);
+  }
   return (
     <div style={{padding:20}}>
       <Flex>
@@ -74,9 +76,10 @@ function App() {
             </div>
            }  
            {currentAccount && <div>
-            <Button onClick={CreateNewTodoList}>
+            <Button onClick={() => setCreateButtonState(true)}>
               Create new todoList
             </Button>
+            {createButtonState && <CreateNewTodoList/>}
            </div>}
       </Flex>
 
