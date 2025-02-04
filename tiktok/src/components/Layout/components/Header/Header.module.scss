@@ -5,4 +5,22 @@
 .inner {
     height: 100%;
     width: var(--default-layout-width-content);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+}
+
+.search {
+}
+
+.clear {
+}
+
+.loading {
+}
+
+.search-btn {
 }
