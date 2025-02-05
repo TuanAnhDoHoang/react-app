@@ -9,11 +9,9 @@ function Header() {
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
-                <div className={cx('logo')}>
-                    <img src={images.logo} alt="tiktok-logo" />
-                </div>
+                <img src={images.logo} alt="tiktok-logo" />
                 <div className={cx('search')}>
-                    <input placeholder="Search for videos and accounts" spellCheck={false} />
+                    <input placeholder="Search videos and accounts" spellCheck={false} />
                     <button className={cx('clear')}>
                         <FontAwesomeIcon icon={faCircleXmark} />
                     </button>
