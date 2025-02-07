@@ -9,6 +9,7 @@ import style from './Header.module.scss';
 import images from '~/assets/images';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from 'src/components/AccountItem';
+import Button from '~/components/Button';
 const cx = classNames.bind(style);
 function Header() {
     const [visible, setVisible] = useState([]);
@@ -47,7 +48,14 @@ function Header() {
                         </button>
                     </div>
                 </Tippy>
-                <div className={cx('actions')}>Actions</div>
+                <div className={cx('actions')}>
+                    <Button className={cx('action-upload')} text to="/upload">
+                        Upload
+                    </Button>
+                    <Button className={cx('action-login')} primary to="/login">
+                        Log in
+                    </Button>
+                </div>
             </div>
         </header>
     );
