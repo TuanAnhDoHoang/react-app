@@ -86,3 +86,20 @@
     font-weight: 600;
     padding-left: 16px;
 }
+.actions {
+    display: flex;
+    justify-content: space-between;
+}
+.action-menu {
+    min-width: 30px;
+    background-color: transparent;
+    font-size: 2rem;
+    margin-left: 8px;
+    padding: 0;
+
+    &:hover {
+        cursor: pointer;
+        background-color: rgb(207, 216, 218);
+        border-radius: 100px;
+    }
+}

@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
-import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisVertical, faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react';
 import { useEffect, useState } from 'react';
 
@@ -10,6 +10,7 @@ import images from '~/assets/images';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from 'src/components/AccountItem';
 import Button from '~/components/Button';
+import { Menu } from 'src/components/Popper';
 const cx = classNames.bind(style);
 function Header() {
     const [visible, setVisible] = useState([]);
@@ -48,6 +49,7 @@ function Header() {
                         </button>
                     </div>
                 </Tippy>
+
                 <div className={cx('actions')}>
                     <Button className={cx('action-upload')} text to="/upload">
                         Upload
@@ -55,6 +57,11 @@ function Header() {
                     <Button className={cx('action-login')} primary to="/login">
                         Log in
                     </Button>
+                    <Menu>
+                        <button className={cx('action-menu')}>
+                            <FontAwesomeIcon icon={faEllipsisVertical} />
+                        </button>
+                    </Menu>
                 </div>
             </div>
         </header>
