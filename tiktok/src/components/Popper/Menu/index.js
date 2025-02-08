@@ -1,26 +1,28 @@
 import Tippy from '@tippyjs/react';
+import tippy from 'tippy.js/headless';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import styles from './Menu.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faKeyboard, faLanguage, faQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faKeyboard, faCircleQuestion, faEarthAsia } from '@fortawesome/free-solid-svg-icons';
 import MenuItem from '~/components/Popper/Menu/MenuItem';
 
 function Menu({ children }) {
     const cx = classNames.bind(styles);
     return (
         <Tippy
-            interactive={true}
+            interactive
             placement="bottom-end"
+            delay={[0, 1000]}
             render={(attrs) => (
-                <div className={cx('menu-items')} tabIndex="-1" {...attrs}>
-                    <PopperWrapper>
+                <div className={cx('menu-items')} {...attrs}>
+                    <PopperWrapper className={cx('menu-padding')}>
                         <MenuItem className={cx('menu-english')}>
-                            <FontAwesomeIcon className={cx('icon')} icon={faLanguage} />
+                            <FontAwesomeIcon className={cx('icon')} icon={faEarthAsia} />
                             <span>English</span>
                         </MenuItem>
-                        <MenuItem className={cx('menu-feedback')}>
-                            <FontAwesomeIcon className={cx('icon')} icon={faQuestion} />
+                        <MenuItem className={cx('menu-feedback')} to="/feedback">
+                            <FontAwesomeIcon className={cx('icon')} icon={faCircleQuestion} />
                             <span>Feedback and help</span>
                         </MenuItem>
                         <MenuItem className={cx('menu-keyboard')}>
